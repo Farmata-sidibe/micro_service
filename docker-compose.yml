@@ -11,10 +11,10 @@ services:
           action: sync
         - path: ./auth/package.json
           action: rebuild
-    ports:
-      - "8081:8081"
     depends_on:
       - mongodb
+    env_file:
+      - ./auth/.env
 
   api-gateway:
     build:
@@ -31,14 +31,17 @@ services:
       - "3000:3000"
     depends_on:
       - auth
+    env_file:
+      - ./api-gateway/.env
 
   mongodb:
     image: mongo:latest
+    restart: always
     container_name: mongodb
     ports:
       - "27018:27017"
     volumes:
-      - mongo-data:/data/db
+      - mongodb_auth:/data/db
 
 volumes:
-  mongo-data:
+  mongodb_auth:
