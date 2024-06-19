@@ -1,0 +1,44 @@
+services:
+  auth:
+    build:
+      context: ./auth
+      dockerfile: Dockerfile
+    container_name: auth
+    develop:
+      watch:
+        - path: ./auth/
+          target: /app/
+          action: sync
+        - path: ./auth/package.json
+          action: rebuild
+    ports:
+      - "8081:8081"
+    depends_on:
+      - mongodb
+
+  api-gateway:
+    build:
+      context: ./api-gateway
+    container_name: api-gateway
+    develop:
+      watch:
+        - path: ./api-gateway/
+          target: /app/
+          action: sync
+        - path: ./api-gateway/package.json
+          action: rebuild
+    ports:
+      - "3000:3000"
+    depends_on:
+      - auth
+
+  mongodb:
+    image: mongo:latest
+    container_name: mongodb
+    ports:
+      - "27018:27017"
+    volumes:
+      - mongo-data:/data/db
+
+volumes:
+  mongo-data:
