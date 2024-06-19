@@ -13,3 +13,15 @@ module.exports = (req, res, next) => {
     });
   }
 };
+
+module.exports.role = (roles) => {
+  return  async (req, res, next) => {
+    if (!roles.includes(req.user.role)) {
+      return res.status(403).json({ msg: 'Permission denied' });
+    }
+    next();
+  }
+
+}
+
+
