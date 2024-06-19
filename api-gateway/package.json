@@ -6,7 +6,6 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon --legacy-watch server.js"
-    
   },
   "author": "farmata",
   "license": "ISC",

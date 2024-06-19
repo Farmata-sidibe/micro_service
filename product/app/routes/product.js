@@ -4,9 +4,9 @@ const router = express();
 const productCtrl = require("../controllers/product.js");
 
 router.post("/add", productCtrl.add);
-router.get("/view", productCtrl.view);
-router.put("/update", productCtrl.update);
-router.delete("/delete", productCtrl.delete);
+router.get("/view/:id", productCtrl.view);
+router.put("/update/:id", productCtrl.update);
+router.delete("/delete/:id", productCtrl.delete);
 
 
 module.exports = router;

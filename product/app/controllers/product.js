@@ -22,8 +22,7 @@ exports.add = async (req, res) => {
 
 exports.view = async (req, res) => {
   try {
-    const { id } = req.body;
-    const product = await Product.findOne({ id });
+    const product = await Product.findById(req.params.id);
     if (!product) {
       return res.status(404).json({ message: "product not found." });
     }
@@ -38,17 +37,17 @@ exports.view = async (req, res) => {
 
 exports.update = async (req, res) => {
   try {
-    const { id, name, price, description } = req.body;
-    const product = await Product.findOne({ id });
+    const {name, price, description } = req.body;
+    const product = await Product.findByIdAndUpdate(
+      req.params.id,
+      {name, price, description},
+      {new : true}
+    )
+   
     if (!product) {
       return res.status(404).json({ message: "product not found." });
     }
-    product.name = name || product.name;
-    product.price = price || product.price;
-    product.description = description || product.description;
-
-    await product.save();
-    res.status(201).json({product});
+    res.status(200).json({product});
   } catch (err) {
     return res.status(500).json({
       error: err.message || "Some error occurred while connected product.",
@@ -59,13 +58,11 @@ exports.update = async (req, res) => {
 exports.delete = async (req, res) => {
   
   try {
-    const { id } = req.body;
-    const product = await Product.findOne({ id });
+    const product = await Product.findByIdAndDelete(req.params.id);
     if (!product) {
       return res.status(404).json({ message: "product not found." });
     }
   
-    await product.deleteOne({ _id: id });
     res.status(200).json({ msg: 'Product removed'});
   } catch (err) {
     return res.status(500).json({
